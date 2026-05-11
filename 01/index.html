@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>독도 역사 연표</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 0.5s ease-out both;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
+
+  <!-- Header Section -->
+  <header class="bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-800 text-white pt-16 pb-12 px-6 rounded-b-[3rem] shadow-xl relative overflow-hidden">
+    
+    <!-- 돌아가기 버튼 -->
+    <a href="../index.html" class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2 text-blue-100 hover:text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-all backdrop-blur-sm text-sm font-medium">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      돌아가기
+    </a>
+
+    <!-- 장식용 배경 요소 -->
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+      <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white blur-3xl"></div>
+      <div class="absolute bottom-10 -left-10 w-40 h-40 rounded-full bg-cyan-200 blur-2xl"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+        독도 역사 연표
+      </h1>
+      <p class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
+        기록으로 증명된 우리 땅, 독도의 역사를 시대별로 살펴봅니다.
+      </p>
+    </div>
+  </header>
+
+  <!-- Filter Tabs -->
+  <div id="tabs-container" class="max-w-4xl mx-auto mt-8 px-4 relative z-20">
+    <!-- 자바스크립트로 탭 버튼들이 렌더링 됩니다 -->
+  </div>
+
+  <!-- Timeline Section -->
+  <main id="timeline-container" class="max-w-5xl mx-auto mt-16 px-4 sm:px-6 relative">
+    <!-- 자바스크립트로 연표 목록이 렌더링 됩니다 -->
+  </main>
+
+  <script>
+    // 데이터 정의
+    const events = [
+      // 조선 시대
+      { id: 1, period: '조선 시대', year: '1454년', title: '『세종실록』 「지리지」 기록', desc: '우산(독도)과 무릉(울릉도) 두 섬이 울진현 정동쪽 바다에 있으며, 날씨가 맑으면 서로 바라볼 수 있다는 내용이 기록됨.', icon: 'book-open' },
+      { id: 2, period: '조선 시대', year: '1481년', title: '「팔도총도」 제작', desc: '울릉도와 우산도(독도) 두 섬이 그려짐 (당시 독도는 울릉도 서쪽에 작게 표현됨).', icon: 'map' },
+      { id: 3, period: '조선 시대', year: '1531년', title: '『신증동국여지승람』 기술', desc: '우산도와 울릉도에 관한 지리적 내용이 기술됨.', icon: 'book-open' },
+      { id: 4, period: '조선 시대', year: '1667년', title: '일본 『은주시청합기』', desc: '일본의 북서쪽 경계를 오키섬으로 규정하며 독도와 울릉도가 조선 땅임을 밝힘.', icon: 'file-text' },
+      { id: 5, period: '조선 시대', year: '1693년', title: '제1차 안용복 사건', desc: '울릉도에서 어로 작업 중이던 안용복 일행이 일본 어부에게 납치되어 일본으로 끌려갔으나, 독도가 조선 영토임을 주장함.', icon: 'ship' },
+      { id: 6, period: '조선 시대', year: '1695년', title: '돗토리번의 답변', desc: '일본 막부의 물음에 돗토리번이 "죽도(울릉도)와 송도(독도)는 돗토리번 소속이 아니다"라고 답변함.', icon: 'file-text' },
+      { id: 7, period: '조선 시대', year: '1696년', title: '제2차 안용복 사건', desc: '안용복이 다시 일본으로 건너가 독도가 조선 땅임을 강력히 주장함. 이후 일본 막부는 울릉도 도해 금지령을 내림.', icon: 'ship' },
+      { id: 8, period: '조선 시대', year: '1697년', title: '수토관 제도 신설', desc: '조선 정부가 울릉도와 주변 섬을 관리하기 위해 수토관 제도를 신설하여 1894년까지 운영함.', icon: 'shield-check' },
+      { id: 9, period: '조선 시대', year: '1779년', title: '일본 「개정 일본여지로정전도」', desc: '독도와 울릉도를 채색하지 않아 일본 영역 밖의 섬으로 표시함.', icon: 'map' },
+      { id: 10, period: '조선 시대', year: '1785년', title: '하야시 시헤이 「삼국접양지도」', desc: '독도와 울릉도를 조선과 같은 황색으로 칠하고 \'조선의 것\'이라 명기함.', icon: 'map' },
+      { id: 11, period: '조선 시대', year: '1808년', title: '『만기요람』 기록', desc: '"우산은 왜인들이 말하는 송도(독도)다"라는 기록이 나타남.', icon: 'book-open' },
+
+      // 근대
+      { id: 12, period: '근대', year: '1870년', title: '일본 『조선국 교제시말 내탐서』', desc: '일본 외무성 보고서에 독도와 울릉도가 조선 영토가 된 사정을 기록함.', icon: 'file-text' },
+      { id: 13, period: '근대', year: '1877년', title: '일본 「태정관 지령」', desc: '일본 최고 행정기관인 태정관이 "울릉도 외 1도(독도)는 일본과 관계가 없다"고 공식 결정함.', icon: 'landmark' },
+      { id: 14, period: '근대', year: '1900년 10월 25일', title: '대한제국 「칙령 제41호」 공포', desc: '독도를 \'석도\'라는 명칭으로 울릉군 관할 구역에 명시하여 영유권을 국제적으로 알림.', icon: 'landmark' },
+      { id: 15, period: '근대', year: '1905년', title: '일본 「시마네현 고시 제40호」', desc: '일본이 독도를 \'다케시마\'로 명명하고 자국 영토로 편입을 시도함.', icon: 'file-text' },
+      { id: 16, period: '근대', year: '1906년', title: '의정부 <지령 제3호>', desc: '울릉군수 심흥택의 보고를 받은 의정부가 일본의 독도 영지 주장이 근거 없음을 밝히고 재조사를 지시함.', icon: 'landmark' },
+
+      // 현대
+      { id: 17, period: '현대', year: '1946년 1월', title: '연합군최고사령관 지령', desc: '독도가 일본의 통치 범위에서 제외되어 한국 영토로 인정됨.', icon: 'globe' },
+      { id: 18, period: '현대', year: '1950년대 초', title: '독도의용수비대 조직', desc: '한국전쟁 중 일본의 불법 침투에 대응하여 민간인 중심의 독도의용수비대가 조직되어 활동함.', icon: 'shield-check' },
+      { id: 19, period: '현대', year: '1952년 1월', title: '평화선 선포', desc: '한국 정부가 \'평화선\'(이승만 라인)을 선포하여 독도를 포함한 인접 해양의 주권을 대내외에 명확히 함.', icon: 'map' },
+      { id: 20, period: '현대', year: '1953년 7월', title: '독도경비대 상주', desc: '울릉경찰서 소속 독도경비대가 상주하며 독도 수호를 시작함.', icon: 'shield-check' },
+      { id: 21, period: '현대', year: '1954년/1962년', title: 'ICJ 회부 제안 거부', desc: '일본 정부가 독도 문제를 국제사법재판소(ICJ)에 회부할 것을 제안했으나 한국 정부가 거부함.', icon: 'landmark' },
+      { id: 22, period: '현대', year: '1965년 6월', title: '한일기본조약 체결', desc: '한일국교정상화 과정에서 체결. 독도 문제는 언급되지 않거나 향후 해결 과제로 남김.', icon: 'file-text' },
+      { id: 23, period: '현대', year: '1981년', title: '최초의 독도 주민', desc: '최종덕 씨가 독도로 주민등록을 이전하여 최초의 독도 주민이 됨.', icon: 'globe' },
+      { id: 24, period: '현대', year: '1998년 9월', title: '신한일어업협정 체결', desc: '독도 주변 수역이 중간수역으로 설정되면서 영유권 논란이 재점화됨.', icon: 'map' },
+      { id: 25, period: '현대', year: '2000년 3월', title: '독도수호대 창설', desc: '시민단체 독도수호대 창설.', icon: 'shield-check' },
+      { id: 26, period: '현대', year: '2005년 3월', title: '시마네현 \'다케시마의 날\' 제정', desc: '일본 시마네현 의회가 조례를 제정하여 갈등이 심화됨.', icon: 'file-text' },
+      { id: 27, period: '현대', year: '2006년 4월', title: '대국민 특별담화', desc: '노무현 대통령이 한일관계와 독도 문제에 관한 대국민 특별담화를 발표함.', icon: 'landmark' },
+      { id: 28, period: '현대', year: '2008년', title: '독도연구소 설립', desc: '정부 연구기관인 독도연구소 설립 및 독도체험관 운영 시작.', icon: 'book-open' },
+      { id: 29, period: '현대', year: '2010년 이후', title: '일본 교과서 왜곡 급증', desc: '일본 중·고등학교 교과서에서 독도를 일본 고유 영토로 기술하고 한국이 \'불법 점거\'하고 있다는 왜곡된 내용이 급증함.', icon: 'book-open' }
+    ];
+
+    const periods = ['전체', '조선 시대', '근대', '현대'];
+    let activePeriod = '전체';
+
+    // 탭 변경 핸들러
+    function handleTabClick(period) {
+      activePeriod = period;
+      renderTabs();
+      renderTimeline();
+    }
+
+    // 탭 렌더링 함수
+    function renderTabs() {
+      const container = document.getElementById('tabs-container');
+      
+      let html = '<div class="bg-white p-2 rounded-2xl shadow-md flex flex-wrap justify-center gap-2">';
+      
+      periods.forEach(period => {
+        const isActive = activePeriod === period;
+        
+        const baseClass = "px-6 py-3 rounded-xl font-medium text-sm md:text-base transition-all duration-300 flex-1 sm:flex-none min-w-[100px]";
+        const activeClass = isActive 
+          ? "bg-blue-600 text-white shadow-md transform scale-105" 
+          : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-blue-600 cursor-pointer";
+        
+        html += `<button onclick="handleTabClick('${period}')" class="${baseClass} ${activeClass}">${period}</button>`;
+      });
+      
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // 연표 렌더링 함수
+    function renderTimeline() {
+      const container = document.getElementById('timeline-container');
+      
+      // 선택된 시대 필터링
+      const visibleEvents = activePeriod === '전체' 
+        ? events 
+        : events.filter(e => e.period === activePeriod);
+
+      // 데이터가 없을 때
+      if (visibleEvents.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-20 text-slate-500">
+            표시할 데이터가 없습니다.
+          </div>
+        `;
+        return;
+      }
+
+      // 연표 레이아웃 구성
+      let html = `
+        <!-- Center Line for Desktop / Left Line for Mobile -->
+        <div class="absolute left-8 sm:left-1/2 top-4 bottom-0 w-1 bg-gradient-to-b from-blue-200 via-blue-300 to-transparent transform sm:-translate-x-1/2 rounded-full"></div>
+        <div class="space-y-12">
+      `;
+
+      visibleEvents.forEach((event, index) => {
+        const isEven = index % 2 === 0;
+        const delay = index * 0.1; // 애니메이션 딜레이 (초)
+
+        // React의 클래스와 조건부 렌더링을 템플릿 리터럴로 포팅
+        const cardContainerClasses = `w-full sm:w-5/12 pl-16 sm:pl-0 ${!isEven ? 'sm:order-1 sm:text-right sm:pr-12' : 'sm:order-3 sm:pl-12'}`;
+        const headerClasses = `flex items-center gap-3 mb-3 ${!isEven ? 'sm:flex-row-reverse' : ''}`;
+        const textAlignmentClass = !isEven ? 'sm:text-right text-left' : 'sm:text-left text-left';
+
+        html += `
+          <div class="relative flex items-center justify-between md:justify-normal w-full animate-fade-in-up" style="animation-delay: ${delay}s">
+            
+            <!-- Card -->
+            <div class="${cardContainerClasses}">
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 hover:-translate-y-1 transition-all duration-300 group">
+                <div class="${headerClasses}">
+                  <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg tracking-wider">
+                    ${event.year}
+                  </span>
+                  <span class="text-xs text-slate-400 font-medium">${event.period}</span>
+                </div>
+                
+                <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-blue-700 transition-colors ${textAlignmentClass}">
+                  ${event.title}
+                </h3>
+                
+                <p class="text-slate-600 leading-relaxed text-sm md:text-base ${textAlignmentClass}">
+                  ${event.desc}
+                </p>
+              </div>
+            </div>
+
+            <!-- Center Node (Icon) -->
+            <div class="absolute left-8 sm:left-1/2 flex items-center justify-center transform -translate-x-1/2 w-10 h-10 rounded-full bg-white border-4 border-blue-500 shadow-lg z-10 sm:order-2">
+              <i data-lucide="${event.icon}" class="text-blue-600 w-4 h-4"></i>
+            </div>
+
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+
+      // 새로 렌더링 된 DOM에 대해 Lucide 아이콘 적용을 다시 트리거합니다.
+      lucide.createIcons();
+    }
+
+    // 초기화 (DOM 로드 후 실행)
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTabs();
+      renderTimeline();
+    });
+  </script>
+</body>
+</html>
