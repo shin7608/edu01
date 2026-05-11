@@ -114,6 +114,23 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
+
+        /* Modal Customization */
+        #media-modal-backdrop {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #media-modal-backdrop.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Standardized Button Width */
+        .btn-standard {
+            min-width: 220px;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 scroll-behavior-smooth">
@@ -125,6 +142,23 @@
         <i data-lucide="sun" class="hidden dark:block"></i>
         <i data-lucide="moon" class="block dark:hidden"></i>
     </button>
+
+    <!-- Modal for Media (Popup) -->
+    <div id="media-modal-backdrop" class="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden max-w-4xl w-full max-h-[90vh] shadow-2xl relative animate__animated animate__zoomIn animate__faster">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-6 border-b border-slate-100 dark:border-slate-800">
+                <h3 id="modal-title" class="text-xl font-bold">자료 보기</h3>
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6 text-slate-500"></i>
+                </button>
+            </div>
+            <!-- Modal Content Area -->
+            <div id="modal-content" class="p-4 flex justify-center items-center bg-slate-50 dark:bg-slate-800/50 overflow-auto min-h-[300px]">
+                <!-- Dynamic Content (Img/Video) goes here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <header class="hero-gradient h-screen flex flex-col items-center justify-center text-center text-white px-4 relative overflow-hidden">
@@ -141,16 +175,30 @@
                 독도 갈등의<br>시작과 본질
             </h1>
             
-            <!-- Added Buttons Section -->
-            <div class="flex flex-wrap justify-center gap-4 mb-10 animate__animated animate__fadeInUp animate__delay-1s">
-                <a href="./01/index.html" class="flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-900/40 hover:scale-105 active:scale-95">
-                    <i data-lucide="calendar" class="w-5 h-5"></i>
-                    독도 연표
-                </a>
-                <a href="./02/02.html" class="flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold rounded-2xl border border-white/30 transition-all hover:scale-105 active:scale-95">
-                    <i data-lucide="book" class="w-5 h-5"></i>
-                    독도 용어 사전
-                </a>
+            <!-- Navigation Buttons Section -->
+            <div class="flex flex-col items-center gap-4 mb-12">
+                <!-- First Row: Main Navigation -->
+                <div class="flex flex-wrap justify-center gap-4 animate__animated animate__fadeInUp animate__delay-1s">
+                    <a href="./01/index.html" class="btn-standard flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-900/40 hover:scale-105 active:scale-95">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                        독도 연표
+                    </a>
+                    <a href="./02/02.html" class="btn-standard flex items-center gap-3 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold rounded-2xl border border-white/30 transition-all hover:scale-105 active:scale-95">
+                        <i data-lucide="book" class="w-5 h-5"></i>
+                        독도 용어 사전
+                    </a>
+                </div>
+                <!-- Second Row: Media Buttons -->
+                <div class="flex flex-wrap justify-center gap-4 animate__animated animate__fadeInUp animate__delay-1s" style="animation-delay: 1.2s;">
+                    <button onclick="openModal('image', 'dokdo_info.png')" class="btn-standard flex items-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-900/20 hover:scale-105 active:scale-95">
+                        <i data-lucide="image" class="w-5 h-5"></i>
+                        인포그래픽 보기
+                    </button>
+                    <button onclick="openModal('video', 'dokdo_mp4_1.mp4')" class="btn-standard flex items-center gap-3 px-8 py-4 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-rose-900/20 hover:scale-105 active:scale-95">
+                        <i data-lucide="play-circle" class="w-5 h-5"></i>
+                        동영상 보기
+                    </button>
+                </div>
             </div>
 
             <div class="w-24 h-1 bg-blue-400 mx-auto mb-8 rounded-full"></div>
@@ -536,6 +584,48 @@
             inner.classList.toggle('is-flipped');
         }
 
+        // Modal Logic
+        const modalBackdrop = document.getElementById('media-modal-backdrop');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+
+        function openModal(type, src) {
+            modalContent.innerHTML = ''; // Clear previous
+            if (type === 'image') {
+                modalTitle.innerText = '독도 인포그래픽';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = '독도 인포그래픽 자료';
+                img.className = 'max-w-full h-auto rounded-lg shadow-lg';
+                img.onerror = () => {
+                    modalContent.innerHTML = '<p class="text-slate-500 p-10">이미지를 불러올 수 없습니다. (파일명: ' + src + ')</p>';
+                };
+                modalContent.appendChild(img);
+            } else if (type === 'video') {
+                modalTitle.innerText = '독도 관련 영상';
+                const video = document.createElement('video');
+                video.src = src;
+                video.controls = true;
+                video.autoplay = true;
+                video.className = 'w-full rounded-lg shadow-lg aspect-video';
+                video.innerHTML = '브라우저가 동영상을 지원하지 않습니다.';
+                modalContent.appendChild(video);
+            }
+            modalBackdrop.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function closeModal() {
+            modalBackdrop.classList.remove('show');
+            modalContent.innerHTML = ''; // Stop video playback if any
+            document.body.style.overflow = ''; // Restore scroll
+        }
+
+        // Close modal on backdrop click
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeModal();
+        });
+
         // Theme Logic
         const themeToggleBtn = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
@@ -564,7 +654,8 @@
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
-            document.getElementById("progress").style.width = scrolled + "%";
+            const prog = document.getElementById("progress");
+            if(prog) prog.style.width = scrolled + "%";
         });
 
         // Intersection Observer for Animation
