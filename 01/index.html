@@ -164,13 +164,14 @@
         const isEven = index % 2 === 0;
         const delay = index * 0.1; // 애니메이션 딜레이 (초)
 
-        // React의 클래스와 조건부 렌더링을 템플릿 리터럴로 포팅
-        const cardContainerClasses = `w-full sm:w-5/12 pl-16 sm:pl-0 ${!isEven ? 'sm:order-1 sm:text-right sm:pr-12' : 'sm:order-3 sm:pl-12'}`;
-        const headerClasses = `flex items-center gap-3 mb-3 ${!isEven ? 'sm:flex-row-reverse' : ''}`;
-        const textAlignmentClass = !isEven ? 'sm:text-right text-left' : 'sm:text-left text-left';
+        // PC 화면에서 좌우 번갈아가며 나오도록 클래스 설정 (isEven이 true면 왼쪽, false면 오른쪽)
+        const rowClasses = `relative flex items-center w-full animate-fade-in-up ${isEven ? 'sm:justify-start' : 'sm:justify-end'}`;
+        const cardContainerClasses = `w-full sm:w-5/12 pl-16 sm:pl-0 ${isEven ? 'sm:pr-12' : 'sm:pl-12'}`;
+        const headerClasses = `flex items-center gap-3 mb-3 ${isEven ? 'sm:flex-row-reverse' : ''}`;
+        const textAlignmentClass = isEven ? 'sm:text-right text-left' : 'text-left';
 
         html += `
-          <div class="relative flex items-center justify-between md:justify-normal w-full animate-fade-in-up" style="animation-delay: ${delay}s">
+          <div class="${rowClasses}" style="animation-delay: ${delay}s">
             
             <!-- Card -->
             <div class="${cardContainerClasses}">
@@ -179,40 +180,4 @@
                   <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg tracking-wider">
                     ${event.year}
                   </span>
-                  <span class="text-xs text-slate-400 font-medium">${event.period}</span>
-                </div>
-                
-                <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-blue-700 transition-colors ${textAlignmentClass}">
-                  ${event.title}
-                </h3>
-                
-                <p class="text-slate-600 leading-relaxed text-sm md:text-base ${textAlignmentClass}">
-                  ${event.desc}
-                </p>
-              </div>
-            </div>
-
-            <!-- Center Node (Icon) -->
-            <div class="absolute left-8 sm:left-1/2 flex items-center justify-center transform -translate-x-1/2 w-10 h-10 rounded-full bg-white border-4 border-blue-500 shadow-lg z-10 sm:order-2">
-              <i data-lucide="${event.icon}" class="text-blue-600 w-4 h-4"></i>
-            </div>
-
-          </div>
-        `;
-      });
-
-      html += '</div>';
-      container.innerHTML = html;
-
-      // 새로 렌더링 된 DOM에 대해 Lucide 아이콘 적용을 다시 트리거합니다.
-      lucide.createIcons();
-    }
-
-    // 초기화 (DOM 로드 후 실행)
-    document.addEventListener('DOMContentLoaded', () => {
-      renderTabs();
-      renderTimeline();
-    });
-  </script>
-</body>
-</html>
+                  <span class="text-xs text-slate-4
